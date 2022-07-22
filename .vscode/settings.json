@@ -1,0 +1,22 @@
+{
+  // editor
+  "editor.fontSize": 20,
+  "editor.fontFamily": "Operator Mono Lig, Dank Mono, Operator Mono, Fira Mono , Fira Code",
+  "editor.fontLigatures": true,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "comment",
+        "settings": {
+          "fontStyle": "italic"
+        }
+      }
+    ]
+  },
+  // cursor
+  "editor.cursorSmoothCaretAnimation": true,
+  "editor.cursorBlinking": "expand",
+  "emmet.triggerExpansionOnTab": true
+}

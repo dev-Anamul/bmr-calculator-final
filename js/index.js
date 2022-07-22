@@ -155,7 +155,7 @@ const mbrFunction = (weight, height, age, gender, activity) => {
 
   if (!weight || !height || !age || !gender || !activity) {
     const msg =
-      'Please fillup all the fields.Because, we sufficient data to calculate your requirement....<br>Thank You..';
+      'Please fillup all the fields. Because, we need sufficient data to calculate your requirement....<br>Thank You..';
     renderedHtml = showAlert('danger', msg);
   }
 
@@ -195,7 +195,7 @@ impericalForm.addEventListener('submit', (e) => {
   // ! empty input checking
   if (!heightFeet || !age || !weightFounds) {
     const msg =
-      'Please fillup all the fields.Because, we sufficient data to calculate your requirement....<br>Thank You..';
+      'Please fillup all the fields. Because, we need sufficient data to calculate your requirement....<br>Thank You..';
     modalBody.innerHTML = showAlert('danger', msg);
   } else if (
     // ! check if the input is not a number

@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <style>
+      :root {
+        --primary-color-dark: #6672ca;
+        --primary-color-semidark: #818ce0;
+        --primary-color: #bec4f0;
+        --primary-color-rgb: rgb(190, 196, 240);
+        --secondary-color: #fdfa99;
+        --secondary-color-rgb: rgb(253, 250, 153);
+        --green-color: #55c57a;
+        --warn-color: #ff7730;
+      }
+
+      .bmr__form__section {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+          url('https://cdn.pixabay.com/photo/2017/04/05/04/44/background-2203989_1280.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        min-height: 100vh;
+        height: min-content;
+        width: 100vw;
+      }
+
+      @media only screen and (max-width: 768px) {
+        .bmr__form__section {
+          height: min-content;
+        }
+        .bmr__form__section::before {
+          height: min-content;
+        }
+      }
+      .form-control:focus {
+        color: #212529;
+        background-color: #fff;
+        border-color: transparent !important;
+        outline: 0;
+        box-shadow: none !important;
+      }
+
+      .custom__card {
+        background-color: rgba(253, 250, 153, 0.5);
+      }
+
+      .custom__input {
+        font-size: 1.1rem !important;
+        padding-left: 1.5rem !important;
+        border: none !important;
+      }
+
+      .custom__form__radio--group {
+        width: 48%;
+        background-color: #fff;
+        padding: 0.7rem 1.5rem;
+        display: inline-block;
+      }
+      .custom__form__radio--group:nth-child(1) {
+        padding-left: 1rem;
+      }
+      @media only screen and (max-width: 768px) {
+        .custom__form__radio--group {
+          width: 100%;
+        }
+        .custom__form__radio--group:nth-child(1) {
+          padding-left: 1.5rem;
+        }
+      }
+
+      .form__radio--input {
+        display: none;
+      }
+
+      .form__radio--label {
+        display: block;
+        font-size: 1.3rem;
+        cursor: pointer;
+        position: relative;
+        padding-left: 2rem;
+      }
+
+      .form__radio--button {
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 0.3rem solid var(--primary-color);
+        border-radius: 50%;
+        display: inline-block;
+        position: absolute;
+        top: 3.9px;
+        left: 0;
+      }
+      .form__radio--button::after {
+        content: '';
+        width: 0.7rem;
+        height: 0.7rem;
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      .form__radio--input:checked
+        ~ .form__radio--label
+        > .form__radio--button::after {
+        opacity: 1;
+      }
+
+      /* form select */
+      .form-select:focus {
+        border-color: transparent !important;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem transparent !important;
+      }
+
+      /* form button */
+      .custom__btn {
+        background-color: var(--primary-color-dark);
+        color: #fff;
+        border: none;
+        border-radius: 0.2rem;
+        padding: 0.5rem 1rem;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .custom__btn:hover {
+        background-color: var(--primary-color-semidark) !important;
+        color: #fff !important;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .active {
+        background-color: var(--primary-color-semidark);
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+      }
+    </style>
+    <title>BMR calculator</title>
+  </head>
+  <body>
+    <section
+      class="bmr__form__section d-md-flex justify-content-center align-items-center"
+    >
+      <div class="container h-100">
+        <div class="row h-100 w-100 justify-content-center align-items-center">
+          <div class="col-lg-6">
+            <div class="bmr__form__container">
+              <div class="custom__card card p-md-5">
+                <div class="card-header d-md-flex justify-content-between">
+                  <h3>BMR calculator</h3>
+                  <div class="card__header__button text-md-start text-end">
+                    <button id="metric" class="btn custom__btn active">
+                      Metric
+                    </button>
+                    <button id="imperical" class="btn custom__btn ms-lg-2">
+                      Imperial
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <!-- ! metric form  -->
+                  <form id="metric__form" class="form metric__form">
+                    <div class="mb-3">
+                      <label for="age" class="form-label fw-bold text-uppercase"
+                        >Your Age :</label
+                      >
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="custom__input form-control py-3"
+                          id="metric__age"
+                          placeholder="Enter Your Age"
+                        />
+                        <span class="input-group-text">Years</span>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label
+                        for="height"
+                        class="form-label fw-bold text-uppercase"
+                        >Your Height :</label
+                      >
+
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="custom__input form-control py-3"
+                          id="metric__height"
+                          placeholder="Enter Your height"
+                        />
+                        <span class="input-group-text">CM</span>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label
+                        for="weight"
+                        class="form-label fw-bold text-uppercase"
+                        >Your Weight :</label
+                      >
+
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="custom__input form-control py-3"
+                          id="metric__weight"
+                          placeholder="Enter Your Weight"
+                        />
+                        <span class="input-group-text">KG</span>
+                      </div>
+                    </div>
+
+                    <div class="mb-4">
+                      <div class="gender__box fw-bold mb-2 text-uppercase">
+                        Select Your Gender :
+                      </div>
+                      <div
+                        class="custom__form__group d-md-flex justify-content-between"
+                      >
+                        <div class="custom__form__radio--group mb-md-0 mb-3">
+                          <input
+                            type="radio"
+                            class="form__radio--input"
+                            name="metric__gender"
+                            value="male"
+                            id="male"
+                            checked
+                          />
+                          <label for="male" class="form__radio--label">
+                            <span class="form__radio--button"></span>
+                            Male
+                          </label>
+                        </div>
+                        <div class="custom__form__radio--group">
+                          <input
+                            type="radio"
+                            class="form__radio--input"
+                            name="metric__gender"
+                            value="female"
+                            id="female"
+                          />
+                          <label for="female" class="form__radio--label">
+                            <span class="form__radio--button"></span>
+                            Female
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="gender__box fw-bold mb-2 text-uppercase">
+                        Select Your Activity Level :
+                      </div>
+                      <select id="activity" class="form-select py-3">
+                        <option selected value="1.2">
+                          Sedentary -little or no exercise
+                        </option>
+                        <option value="1.375">
+                          Lightly Active -little exercise or sports 1-3 days
+                        </option>
+                        <option value="1.55">
+                          Moderately Active -moderate exercise or sports 3-5
+                          days
+                        </option>
+                        <option value="1.725">
+                          Very Active -hard exercise or sport 3-7 days
+                        </option>
+                      </select>
+                    </div>
+                    <div class="">
+                      <button
+                        type="submit"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        class="custom__btn btn fw-bold text-uppercase"
+                      >
+                        calculate
+                      </button>
+                    </div>
+                  </form>
+
+                  <!-- ! ///// imperical form///// -->
+                  <form
+                    id="imperical__form"
+                    class="form imperical__form hidden"
+                  >
+                    <div class="mb-3">
+                      <label for="age" class="form-label fw-bold text-uppercase"
+                        >Your Age :</label
+                      >
+
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="custom__input form-control py-3"
+                          id="imperical__age"
+                          placeholder="Enter Your Age"
+                        />
+                        <span class="input-group-text">Years</span>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label
+                        for="height"
+                        class="form-label fw-bold text-uppercase"
+                        >Your Height :</label
+                      >
+                      <div class="row">
+                        <div class="col-md-6 mb-md-0 mb-3">
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="custom__input form-control py-3"
+                              id="imperical__height__feet"
+                              placeholder="Enter Your height"
+                            />
+                            <span class="input-group-text">feet</span>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="input-group">
+                            <input
+                              type="text"
+                              class="custom__input form-control py-3"
+                              id="imperical__height__inches"
+                              placeholder="Enter Your height"
+                            />
+                            <span class="input-group-text">Inches</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label
+                        for="weight"
+                        class="form-label fw-bold text-uppercase"
+                        >Your Weight :</label
+                      >
+
+                      <div class="input-group mb-3">
+                        <input
+                          type="text"
+                          class="custom__input form-control py-3"
+                          id="imperical__weight"
+                          placeholder="Enter Your Weight"
+                        />
+                        <span class="input-group-text">Pounds</span>
+                      </div>
+                    </div>
+
+                    <div class="mb-4">
+                      <div class="gender__box fw-bold mb-2 text-uppercase">
+                        Select Your Gender :
+                      </div>
+                      <div
+                        class="custom__form__group d-md-flex justify-content-between"
+                      >
+                        <div class="custom__form__radio--group mb-md-0 mb-3">
+                          <input
+                            type="radio"
+                            class="form__radio--input"
+                            name="imperical__gender"
+                            value="male"
+                            id="immale"
+                            checked
+                          />
+                          <label for="immale" class="form__radio--label">
+                            <span class="form__radio--button"></span>
+                            Male
+                          </label>
+                        </div>
+                        <div class="custom__form__radio--group">
+                          <input
+                            type="radio"
+                            class="form__radio--input"
+                            name="imperical__gender"
+                            value="female"
+                            id="imfemale"
+                          />
+                          <label for="imfemale" class="form__radio--label">
+                            <span class="form__radio--button"></span>
+                            Female
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="gender__box fw-bold mb-2 text-uppercase">
+                        Select Your Activity Level :
+                      </div>
+                      <select id="imperical__activity" class="form-select py-3">
+                        <option selected value="1.2">
+                          Sedentary -little or no exercise
+                        </option>
+                        <option value="1.375">
+                          Lightly Active -little exercise or sports 1-3 days
+                        </option>
+                        <option value="1.55">
+                          Moderately Active -moderate exercise or sports 3-5
+                          days
+                        </option>
+                        <option value="1.725">
+                          Very Active -hard exercise or sport 3-7 days
+                        </option>
+                      </select>
+                    </div>
+                    <div class="">
+                      <button
+                        type="submit"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        class="custom__btn btn fw-bold text-uppercase"
+                      >
+                        calculate
+                      </button>
+                    </div>
+                    <!-- ! testing radio input -->
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ! Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Your Calculated Result :
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div id="modal__body" class="modal-body">
+            <div>
+              <div class="card my-3">
+                <div class="card-body">
+                  <h5 class="card-title">Your Daily Calories Target For :</h5>
+                  <p
+                    class="card-text d-flex justify-content-between px-5 border p-2"
+                  >
+                    <span class="fw-bold">Lose Fat : </span>
+                    <span>${caloriesLoaseFat}</span>
+                  </p>
+                  <p
+                    class="card-text d-flex justify-content-between px-5 border p-2"
+                  >
+                    <span class="fw-bold">Maintain Weight : </span>
+                    <span>${targetCalories}</span>
+                  </p>
+                  <p
+                    class="card-text d-flex justify-content-between px-5 border p-2"
+                  >
+                    <span class="fw-bold">Gain Muscle : </span>
+                    <span>${caloriesGainMucle}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Your Daily Protein Target</h5>
+                  <p
+                    class="card-text d-flex justify-content-between px-5 border p-2"
+                  >
+                    <span class="fw-bold">Minimum Protein : </span>
+                    <span>${minimunProtein}g</span>
+                  </p>
+                  <p
+                    class="card-text d-flex justify-content-between px-5 border p-2"
+                  >
+                    <span class="fw-bold">Recommended Protein : </span>
+                    <span>${generallyProtein}g</span>
+                  </p>
+                  <p
+                    class="card-text d-flex justify-content-between px-5 border p-2"
+                  >
+                    <span class="fw-bold">Maximum Protein : </span>
+                    <span>${maximumProtein}g</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // ! get the button here
+      const impericalButton = document.getElementById('imperical');
+      const metricButton = document.getElementById('metric');
+      const modalBody = document.getElementById('modal__body');
+
+      // ! get the form here
+      const impericalForm = document.getElementById('imperical__form');
+      const metricForm = document.getElementById('metric__form');
+
+      impericalButton.addEventListener('click', () => {
+        impericalForm.classList.remove('hidden');
+        metricForm.classList.add('hidden');
+        impericalButton.classList.add('active');
+        metricButton.classList.remove('active');
+      });
+
+      metricButton.addEventListener('click', () => {
+        metricForm.classList.remove('hidden');
+        impericalForm.classList.add('hidden');
+        metricButton.classList.add('active');
+        impericalButton.classList.remove('active');
+      });
+
+      // ! form functionality here
+      const showAlert = (className, message) => {
+        return `<div class="alert alert-${className} input_alert" role="alert">${message}</div>`;
+      };
+
+      const showHtml = (
+        caloriesLoaseFat,
+        targetCalories,
+        caloriesGainMucle,
+        minimunProtein,
+        generallyProtein,
+        maximumProtein
+      ) => {
+        return `<div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your Daily Calories Target For :</h5>
+        <p
+          class="card-text d-flex justify-content-between px-5 border p-2"
+        >
+          <span class="fw-bold">Lose Fat : </span>
+          <span>${caloriesLoaseFat}</span>
+        </p>
+        <p
+          class="card-text d-flex justify-content-between px-5 border p-2"
+        >
+          <span class="fw-bold">Maintain Weight : </span>
+          <span>${targetCalories}</span>
+        </p>
+        <p
+          class="card-text d-flex justify-content-between px-5 border p-2"
+        >
+          <span class="fw-bold">Gain Muscle : </span>
+          <span>${caloriesGainMucle}</span>
+        </p>
+      </div>
+    </div>
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Your Daily Protein Target</h5>
+        <p
+          class="card-text d-flex justify-content-between px-5 border p-2"
+        >
+          <span class="fw-bold">Minimum Protein : </span>
+          <span>${minimunProtein}g</span>
+        </p>
+        <p
+          class="card-text d-flex justify-content-between px-5 border p-2"
+        >
+          <span class="fw-bold">Recommended Protein : </span>
+          <span>${generallyProtein}g</span>
+        </p>
+        <p
+          class="card-text d-flex justify-content-between px-5 border p-2"
+        >
+          <span class="fw-bold">Maximum Protein : </span>
+          <span>${maximumProtein}g</span>
+        </p>
+      </div>
+    </div>
+  </div>`;
+      };
+
+      const maleBMR = (weight, height, age, activity) => {
+        // ! calculate the calories
+        const BMR = 10 * weight + 6.25 * height - 5 * age + 5;
+        const targetCalories = Math.round(BMR * activity);
+        const caloriesLoaseFat = Math.round(targetCalories * 0.9);
+        const caloriesGainMucle = Math.round(targetCalories * 1.26);
+
+        // ! calculate protein
+        const weightInPound = Math.round(weight * 2.20462);
+        const minimunProtein = Math.round(weightInPound * 0.72);
+        const generallyProtein = Math.round(weightInPound * 1);
+        const maximumProtein = Math.round(weightInPound * 1.5);
+
+        // ! return ready html
+        return showHtml(
+          caloriesLoaseFat,
+          targetCalories,
+          caloriesGainMucle,
+          minimunProtein,
+          generallyProtein,
+          maximumProtein
+        );
+      };
+
+      const femaleBMR = (weight, height, age, activity) => {
+        //! calory calculation
+        const BMR = 10 * weight + 6.25 * height - 5 * age - 161;
+        const targetCalories = Math.round(BMR * activity);
+        const caloriesLoaseFat = Math.round(targetCalories * 0.9);
+        const caloriesGainMucle = Math.round(targetCalories * 1.26);
+
+        // ! protein calculation
+        const weightInPound = Math.round(weight * 2.20462);
+        const minimunProtein = Math.round(weightInPound * 0.72);
+        const generallyProtein = Math.round(weightInPound);
+        const maximumProtein = Math.round(weightInPound * 1.5);
+
+        // ! return ready html
+        return showHtml(
+          caloriesLoaseFat,
+          targetCalories,
+          caloriesGainMucle,
+          minimunProtein,
+          generallyProtein,
+          maximumProtein
+        );
+      };
+
+      // ! function to check NaN
+      const isNaN = (x) => x !== x;
+
+      // ! final bmr funtion
+      const mbrFunction = (weight, height, age, gender, activity) => {
+        let renderedHtml = '';
+
+        if (!weight || !height || !age || !gender || !activity) {
+          const msg =
+            'Please fillup all the fields. Because, we need sufficient data to calculate your requirement....<br>Thank You..';
+          renderedHtml = showAlert('danger', msg);
+        }
+
+        if (Number.isNaN(height) || Number.isNaN(weight) || Number.isNaN(age)) {
+          const msg =
+            'Your data is not valid.Please Provide valid data....<br>Thank You..';
+          renderedHtml = showAlert('danger', msg);
+        }
+
+        if (gender === 'male') {
+          renderedHtml = maleBMR(weight, height, age, activity);
+        }
+
+        if (gender === 'female') {
+          renderedHtml = femaleBMR(weight, height, age, activity);
+        }
+
+        return renderedHtml;
+      };
+
+      // Todo imperical form functionality
+      impericalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // ! get all the necessary inputs here
+        const weightFounds = document.getElementById('imperical__weight').value;
+        const heightFeet = document.getElementById(
+          'imperical__height__feet'
+        ).value;
+        const heightInch =
+          document.getElementById('imperical__height__inches').value || 0;
+        const age = document.getElementById('imperical__age').value;
+        const gender = document.querySelector(
+          'input[name="imperical__gender"]:checked'
+        ).value;
+
+        const activity = document.getElementById('imperical__activity').value;
+
+        // ! empty input checking
+        if (!heightFeet || !age || !weightFounds) {
+          const msg =
+            'Please fillup all the fields. Because, we need sufficient data to calculate your requirement....<br>Thank You..';
+          modalBody.innerHTML = showAlert('danger', msg);
+        } else if (
+          // ! check if the input is not a number
+          Number.isNaN(parseFloat(heightFeet)) ||
+          Number.isNaN(parseFloat(weightFounds)) ||
+          Number.isNaN(parseFloat(age)) ||
+          Number.isNaN(parseFloat(heightInch))
+        ) {
+          const msg =
+            'Your data is not valid.Please Provide valid data....<br>Thank You..';
+          modalBody.innerHTML = showAlert('danger', msg);
+        } else {
+          // ! convert found to kg
+          const weightKg = Math.round(weightFounds * 0.453592);
+
+          // ! convert feet inch to cm
+          const heightCm = Math.round(
+            (heightFeet * 12 + parseFloat(heightInch)) * 2.54
+          );
+
+          // ! call the final bmr function here
+          modalBody.innerHTML = mbrFunction(
+            weightKg,
+            heightCm,
+            age,
+            gender,
+            activity
+          );
+        }
+      });
+
+      // Todo metric form's funtionality
+      metricForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // ! gell all the necessary data here
+        const weightKG = document.getElementById('metric__weight').value;
+        const heightCM = document.getElementById('metric__height').value;
+        const age = parseFloat(document.getElementById('metric__age').value);
+        const gender = document.querySelector(
+          'input[name="metric__gender"]:checked'
+        ).value;
+        const activity = parseFloat(document.getElementById('activity').value);
+
+        if (!weightKG || !heightCM || !age) {
+          const msg =
+            'Please fillup all the fields.Because, we sufficient data to calculate your requirement....<br>Thank You..';
+          modalBody.innerHTML = showAlert('danger', msg);
+        } else if (
+          // ! check if the input is not a number
+          Number.isNaN(parseFloat(weightKG)) ||
+          Number.isNaN(parseFloat(heightCM)) ||
+          Number.isNaN(parseFloat(age))
+        ) {
+          const msg =
+            'Your data is not valid.Please Provide valid data....<br>Thank You..';
+          modalBody.innerHTML = showAlert('danger', msg);
+        } else {
+          const weightNumber = parseFloat(weightKG);
+          const heightNumber = Math.round(parseFloat(heightCM));
+
+          // ! call the final bmr function here
+          modalBody.innerHTML = mbrFunction(
+            weightNumber,
+            heightNumber,
+            age,
+            gender,
+            activity
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

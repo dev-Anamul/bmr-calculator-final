@@ -18,5 +18,6 @@
   // cursor
   "editor.cursorSmoothCaretAnimation": true,
   "editor.cursorBlinking": "expand",
-  "emmet.triggerExpansionOnTab": true
+  "emmet.triggerExpansionOnTab": true,
+  "liveServer.settings.port": 5501
 }
